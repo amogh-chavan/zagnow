@@ -11,6 +11,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(), //using fastify instead of express because it is 2x in speed
   );
+  app.enableCors({ origin: '*', allowedHeaders: '*', methods: '*' });
 
   setupSwagger(app);
 
