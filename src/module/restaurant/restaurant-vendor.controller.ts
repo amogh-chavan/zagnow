@@ -7,7 +7,7 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { RestaurantVendorService } from './restaurant-vendor.service';
+import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -25,7 +25,7 @@ import { RestaurantReviewReply } from './entities/restaurant_replies.entity';
 @ApiTags('Restaurant')
 @Controller('vendor/restaurant')
 export class RestaurantVendorController {
-  constructor(private readonly restaurantService: RestaurantVendorService) {}
+  constructor(private readonly restaurantService: RestaurantService) {}
 
   @Post()
   @DVendorRoles(VendorRoles.OWNER)

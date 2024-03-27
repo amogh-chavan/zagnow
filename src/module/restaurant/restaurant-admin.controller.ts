@@ -8,7 +8,7 @@ import {
   UseGuards,
   Param,
 } from '@nestjs/common';
-import { RestaurantAdminService } from './restaurant-admin.service';
+import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -17,73 +17,98 @@ import { Roles as DAdminRoles } from '../user/admin/role.decorator';
 import { AuthGuard as AdminAuthGuard } from '../user/admin/auth.gaurd';
 import { RoleGuard as AdminRoleGuard } from '../user/admin/role.gaurd';
 import { TOKEN_NAME } from 'src/constant/variable.constant';
+import { CreateRestaurantReviewDto } from './dto/create-restaurant-review.dto';
+import { RestaurantReview } from './entities/restaurant_review.entity';
+import { UpdateRestaurantReviewDto } from './dto/update-restaurant-review.dto';
+import ApiResponse from 'src/shared/dto/api_response.dto';
 
 @ApiTags('Restaurant')
 @Controller('admin/restaurant')
 export class RestaurantAdminController {
-  constructor(private readonly restaurantService: RestaurantAdminService) {}
+  constructor(private readonly restaurantService: RestaurantService) {}
 
   @Post()
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  create(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.createRestaurant(createRestaurantDto);
+  async create(@Body() createRestaurantDto: CreateRestaurantDto) {
+    const data =
+      await this.restaurantService.createRestaurant(createRestaurantDto);
+    return new ApiResponse(true, data, 'Restaurant created');
   }
 
   @Get(':id')
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  findOne(@Param('id') id: string) {
-    return this.restaurantService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.restaurantService.findOne(+id);
+    return new ApiResponse(true, data, 'Restaurant fetched');
   }
 
   @Patch(':id')
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateRestaurantDto: UpdateRestaurantDto,
   ) {
-    return this.restaurantService.update(+id, updateRestaurantDto);
+    const data = await this.restaurantService.update(+id, updateRestaurantDto);
+    return new ApiResponse(true, data, 'Restaurant updated');
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.restaurantService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const data = await this.restaurantService.remove(+id);
+    return new ApiResponse(true, data, 'Restaurant deleted');
   }
 
   @Post('/:id/review')
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  createReview(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.createRestaurant(createRestaurantDto);
+  async createReview(
+    @Param('id') id: string,
+    @Body() createRestaurantReviewDto: CreateRestaurantReviewDto,
+  ) {
+    const data = await this.restaurantService.createReview({
+      ...createRestaurantReviewDto,
+      restaurant_id: +id,
+    } as RestaurantReview);
+    return new ApiResponse(true, data, 'Restaurant review created');
   }
 
   @Get('/:id/reviews')
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  readRestaurantReviews(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.createRestaurant(createRestaurantDto);
+  async readRestaurantReviews(@Param('id') id: string) {
+    const data = await this.restaurantService.readRestaurantReviews(+id);
+    return new ApiResponse(true, data, 'Restaurant reviews fetched');
   }
 
   @Patch('/review/:id')
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  updateRestaurantReview(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.createRestaurant(createRestaurantDto);
+  async updateReview(
+    @Param('id') id: string,
+    @Body() updateRestaurantReviewDto: UpdateRestaurantReviewDto,
+  ) {
+    const data = await this.restaurantService.updateReview(
+      +id,
+      updateRestaurantReviewDto,
+    );
+    return new ApiResponse(true, data, 'Restaurant review updated');
   }
 
   @Delete('/review/:id')
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  deleteRestaurantReview(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.createRestaurant(createRestaurantDto);
+  async deleteReview(@Param('id') id: string) {
+    const data = await this.restaurantService.removeReview(+id);
+    return new ApiResponse(true, data, 'Restaurant review deleted');
   }
 }
