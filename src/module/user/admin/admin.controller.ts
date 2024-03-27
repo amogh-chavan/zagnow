@@ -16,6 +16,9 @@ import ApiResponse from 'src/shared/dto/api_response.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { AuthGuard } from './auth.gaurd';
 import { TOKEN_NAME } from 'src/constant/variable.constant';
+import { RoleGuard } from './role.gaurd';
+import { Roles } from './role.decorator';
+import { AdminRoles } from './enum';
 
 @Controller('user/admin')
 @ApiTags('Admin')
@@ -23,13 +26,16 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
+  @Roles(AdminRoles.SUPERADMIN)
+  @UseGuards(AuthGuard, RoleGuard)
   async create(@Body() createAdminDto: CreateAdminDto) {
     const data = await this.adminService.create(createAdminDto);
     return new ApiResponse(true, data, 'Admin created');
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
+  @Roles(AdminRoles.SUPERADMIN)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async findOne(@Param('id') id: string) {
     const data = await this.adminService.findOne(+id);
@@ -37,7 +43,8 @@ export class AdminController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
+  @Roles(AdminRoles.SUPERADMIN)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async update(
     @Param('id') id: string,
@@ -48,7 +55,8 @@ export class AdminController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @Roles(AdminRoles.SUPERADMIN)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async remove(@Param('id') id: string) {
     const data = await this.adminService.remove(+id);

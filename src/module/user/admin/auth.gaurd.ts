@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
+import { UserType } from 'src/shared/enums/user_type';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -18,7 +19,9 @@ export class AuthGuard implements CanActivate {
     }
     const authToken = authorization.replace(/bearer/gim, '').trim();
     const data = await this.adminService.validateToken(authToken);
-
+    if (data.user_type !== UserType.ADMIN) {
+      throw new UnauthorizedException('Authorization Error');
+    }
     request.data = data;
     return true;
   }

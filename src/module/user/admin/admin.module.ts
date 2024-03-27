@@ -4,6 +4,7 @@ import { AdminController } from './admin.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Admin } from '../admin/entities/admin.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { AccessContorlService } from './access-control.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [AdminController],
-  providers: [AdminService],
+  providers: [AdminService, AccessContorlService],
 })
 export class AdminModule {}

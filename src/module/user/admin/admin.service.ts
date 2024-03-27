@@ -12,6 +12,8 @@ import * as bcrypt from 'bcrypt'; // For secure password hashing
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserType } from 'src/shared/enums/user_type';
+import { AdminRoles } from './enum';
+import { AdminTokenPayload } from './types';
 
 @Injectable()
 export class AdminService {
@@ -123,10 +125,11 @@ export class AdminService {
       throw new BadRequestException('Invalid email or password');
     }
 
-    const payload = {
+    const payload: AdminTokenPayload = {
       id: admin.id,
       email: admin.email,
       user_type: UserType.ADMIN,
+      roles: [AdminRoles.SUPERADMIN],
     };
     const accessToken = this.jwtService.sign(payload);
 
