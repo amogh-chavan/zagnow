@@ -1,23 +1,42 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsEmail, IsInt, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { VendorRoles } from '../enum';
 
 export class CreateVendorDto {
   @IsNotEmpty()
+  @IsString()
   @ApiProperty()
   name: string;
 
-  @IsNotEmpty()
   @IsEmail()
+  @IsNotEmpty()
   @ApiProperty()
   email: string;
 
   @IsNotEmpty()
-  @MinLength(6)
+  @IsArray() // Validate as an array
+  @ApiProperty()
+  roles: VendorRoles[];
+
+  @IsNotEmpty()
+  @MinLength(6) // Enforce minimum password length
   @ApiProperty()
   password: string;
 
-  @IsNotEmpty()
-  @IsInt()
-  @ApiProperty()
-  restaurant_id: number;
+  // Custom validation method
+  validateRoles(roles: string[]) {
+    if (
+      !roles.every((role) =>
+        Object.values(VendorRoles).includes(role as VendorRoles),
+      )
+    ) {
+      throw new Error('Invalid role: Roles must be from the VendorRoles enum');
+    }
+  }
 }

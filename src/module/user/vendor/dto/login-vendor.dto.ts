@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-export class UpdateVendorDto {
+export class LoginVendorDto {
+  @IsEmail()
   @IsNotEmpty()
-  @IsString()
   @ApiProperty()
-  name: string;
+  email: string;
 
   @IsNotEmpty()
   @MinLength(6) // Enforce minimum password length
