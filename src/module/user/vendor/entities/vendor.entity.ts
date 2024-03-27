@@ -1,1 +1,1 @@
-export class Vendor {}
+// export class Vendor {}

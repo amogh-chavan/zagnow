@@ -9,7 +9,7 @@ export class User1711517287083 implements MigrationInterface {
         email VARCHAR(255) NOT NULL, 
         password VARCHAR(255) NOT NULL, 
         restaurant_id bigint NOT NULL, 
-        is_deleted boolean NOT NULL, 
+        is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -18,7 +18,7 @@ export class User1711517287083 implements MigrationInterface {
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 
         password VARCHAR(255) NOT NULL, 
-        is_deleted boolean NOT NULL, 
+        is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -27,7 +27,7 @@ export class User1711517287083 implements MigrationInterface {
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 
         password VARCHAR(255) NOT NULL, 
-        is_deleted boolean NOT NULL, 
+        is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );

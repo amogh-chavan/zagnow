@@ -25,7 +25,11 @@ export const connectionSource = new DataSource({
   password: envConfigService.getOrThrow('DB_PASSWORD'),
   database: envConfigService.getOrThrow('DB_NAME'),
   logging: true,
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  entities: [
+    join(__dirname, '/../../', '/module/**/*.entity{.ts,.js}'),
+    join(__dirname, '/../../', '/module/**/**/*.entity{.ts,.js}'),
+  ],
   migrations: [join(__dirname, '/../../', 'database/migrations/**/*{.ts,.js}')],
   synchronize: false,
   migrationsTableName: 'migrations',
