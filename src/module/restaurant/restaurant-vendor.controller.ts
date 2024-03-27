@@ -7,7 +7,7 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { RestaurantService } from './restaurant.service';
+import { RestaurantVendorService } from './restaurant-vendor.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -18,55 +18,76 @@ import { RoleGuard as VendorRoleGuard } from '../user/vendor/role.gaurd';
 import { TOKEN_NAME } from 'src/constant/variable.constant';
 import { RequestTokenPayload } from 'src/shared/types/request';
 import { VendorTokenPayload } from '../user/vendor/types';
+import ApiResponse from 'src/shared/dto/api_response.dto';
+import { CreateRestaurantReviewReplyDto } from './dto/create-restaurant-review-reply.dto';
+import { RestaurantReviewReply } from './entities/restaurant_replies.entity';
 
 @ApiTags('Restaurant')
 @Controller('vendor/restaurant')
 export class RestaurantVendorController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(private readonly restaurantService: RestaurantVendorService) {}
 
   @Post()
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  create(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+  async create(@Body() createRestaurantDto: CreateRestaurantDto) {
+    const data =
+      await this.restaurantService.createRestaurant(createRestaurantDto);
+    return new ApiResponse(true, data, 'Restaurant created');
   }
 
   @Get()
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  findOne(@Req() request: RequestTokenPayload) {
+  async readVendorRestaurant(@Req() request: RequestTokenPayload) {
     const { restaurant_id } = request.data as VendorTokenPayload;
-    return this.restaurantService.findOne(restaurant_id);
+    const data = await this.restaurantService.findOne(restaurant_id);
+    return new ApiResponse(true, data, 'Restaurant fetched');
   }
 
   @Patch()
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  update(
+  async update(
     @Req() request: RequestTokenPayload,
     @Body() updateRestaurantDto: UpdateRestaurantDto,
   ) {
     const { restaurant_id } = request.data as VendorTokenPayload;
-    return this.restaurantService.update(restaurant_id, updateRestaurantDto);
+    const data = await this.restaurantService.update(
+      restaurant_id,
+      updateRestaurantDto,
+    );
+    return new ApiResponse(true, data, 'Restaurant updated');
   }
 
   @Get('/reviews')
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  readAllReviews(@Req() request: RequestTokenPayload) {
+  async readAllReviews(@Req() request: RequestTokenPayload) {
     const { restaurant_id } = request.data as VendorTokenPayload;
-    return this.restaurantService.findOne(restaurant_id);
+    const data =
+      await this.restaurantService.readRestaurantReviews(restaurant_id);
+    return new ApiResponse(true, data, 'Restaurant updated');
   }
 
   @Post('/review/:id/reply')
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  createReviewReply(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+  async createReviewReply(
+    @Req() request: RequestTokenPayload,
+    @Body() createRestaurantReviewReplyDto: CreateRestaurantReviewReplyDto,
+  ) {
+    const { id, user_type } = request.data as VendorTokenPayload;
+    const data = await this.restaurantService.createReviewReply({
+      ...createRestaurantReviewReplyDto,
+      user_type,
+      user_id: id,
+    } as RestaurantReviewReply);
+    return new ApiResponse(true, data, 'Restaurant updated');
   }
 }

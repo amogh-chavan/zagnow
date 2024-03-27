@@ -26,6 +26,9 @@ export class Restaurant extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   menu_images: object;
 
+  @Column({ type: 'int', default: 0, nullable: false })
+  rating: number;
+
   @Column({ nullable: false, default: false })
   is_deleted: boolean;
 

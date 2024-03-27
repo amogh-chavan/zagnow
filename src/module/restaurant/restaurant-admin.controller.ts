@@ -8,7 +8,7 @@ import {
   UseGuards,
   Param,
 } from '@nestjs/common';
-import { RestaurantService } from './restaurant.service';
+import { RestaurantAdminService } from './restaurant-admin.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -21,14 +21,14 @@ import { TOKEN_NAME } from 'src/constant/variable.constant';
 @ApiTags('Restaurant')
 @Controller('admin/restaurant')
 export class RestaurantAdminController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(private readonly restaurantService: RestaurantAdminService) {}
 
   @Post()
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   create(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+    return this.restaurantService.createRestaurant(createRestaurantDto);
   }
 
   @Get(':id')
@@ -60,7 +60,7 @@ export class RestaurantAdminController {
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   createReview(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+    return this.restaurantService.createRestaurant(createRestaurantDto);
   }
 
   @Get('/:id/reviews')
@@ -68,7 +68,7 @@ export class RestaurantAdminController {
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   readRestaurantReviews(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+    return this.restaurantService.createRestaurant(createRestaurantDto);
   }
 
   @Patch('/review/:id')
@@ -76,7 +76,7 @@ export class RestaurantAdminController {
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   updateRestaurantReview(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+    return this.restaurantService.createRestaurant(createRestaurantDto);
   }
 
   @Delete('/review/:id')
@@ -84,6 +84,6 @@ export class RestaurantAdminController {
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   deleteRestaurantReview(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+    return this.restaurantService.createRestaurant(createRestaurantDto);
   }
 }

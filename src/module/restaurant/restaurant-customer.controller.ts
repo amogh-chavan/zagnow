@@ -6,7 +6,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { RestaurantService } from './restaurant.service';
+import { RestaurantVendorService } from './restaurant-vendor.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard as CustomerAuthGuard } from '../user/customer/auth.gaurd';
 import { TOKEN_NAME } from 'src/constant/variable.constant';
@@ -14,7 +14,7 @@ import { TOKEN_NAME } from 'src/constant/variable.constant';
 @ApiTags('Restaurant')
 @Controller('/restaurant')
 export class RestaurantCustomerController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(private readonly restaurantService: RestaurantVendorService) {}
 
   @Get('/listing')
   @UseGuards(CustomerAuthGuard)

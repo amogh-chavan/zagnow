@@ -33,7 +33,7 @@ export class CustomerService {
       },
       select: ['id', 'name', 'email'],
     });
-    console.log({ existingCustomer });
+
     if (existingCustomer) {
       throw new BadRequestException('Customer with given email already exists');
     }

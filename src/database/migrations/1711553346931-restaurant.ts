@@ -12,6 +12,7 @@ export class Restaurant1711553346931 implements MigrationInterface {
             restaurant_longitude float4 NOT NULL, 
             restaurant_images jsonb NULL, 
             menu_images jsonb NULL, 
+            rating float4 NOT NULL 0,
             is_deleted boolean NOT NULL DEFAULT false, 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
