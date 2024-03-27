@@ -11,6 +11,7 @@ import { DatabaseModule } from 'src/database/database.module';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+      envFilePath: ['.dev.env', '.prod.env'],
     }),
     DatabaseModule,
     UserModule,

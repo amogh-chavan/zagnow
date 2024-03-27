@@ -1,4 +1,4 @@
-import IApiResponse from '../../../types/api_response.interface';
+import IApiResponse from '../types/api_response.interface';
 
 class ApiResponse<T> implements IApiResponse<T> {
   constructor(

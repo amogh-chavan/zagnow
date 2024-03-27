@@ -5,6 +5,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { AppModule } from './module/app.module';
 import setupSwagger from './config/swagger.config';
+import { envConfigService } from './config/env.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -14,7 +15,9 @@ async function bootstrap() {
   app.enableCors({ origin: '*', allowedHeaders: '*', methods: '*' });
 
   setupSwagger(app);
-
-  await app.listen(3000);
+  const port = envConfigService.get('PORT');
+  await app.listen(port, () => {
+    console.log(`App running on http://localhost:${port}`);
+  });
 }
 bootstrap();

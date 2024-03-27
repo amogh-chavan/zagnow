@@ -7,6 +7,12 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "typeorm": "ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli",
+    "migration:run": "npm run typeorm -- -d src/shared/utils/datasource.ts migration:run",
+    "migration:generate": "npm run typeorm -- -d src/shared/utils/datasource.ts migration:generate ./src/database/migrations/%npm_config_name%",
+    "migration:create": "npm run typeorm -- migration:create ./src/database/migrations/$npm_config_name",
+    "migration:revert": "npm run typeorm -- -d src/shared/utils/datasource.ts migration:revert",
+    "migration:show": "npm run typeorm -- migration:show -d src/shared/utils/datasource.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

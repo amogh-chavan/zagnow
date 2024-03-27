@@ -78,3 +78,13 @@ Nest is [MIT licensed](LICENSE).
 # creating new api module
 $ nest generate module module_name api
 ```
+
+## Database Migration commands
+
+```bash
+# creating new migration file
+$ npm run migration:create --name=migration_name
+
+# running new migration files
+$ npm run migration:run
+```
