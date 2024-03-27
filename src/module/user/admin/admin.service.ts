@@ -33,7 +33,6 @@ export class AdminService {
       },
       select: ['id', 'name', 'email'],
     });
-    console.log({ existingAdmin });
     if (existingAdmin) {
       throw new BadRequestException('Admin with given email already exists');
     }

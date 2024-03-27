@@ -10,9 +10,9 @@ export class RestaurantReviewReply1711557648016 implements MigrationInterface {
         restaurant_id bigint DEFAULT NULL, 
         rating int NOT NULL, 
         comment varchar(255), 
-        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-        FOREIGN KEY (restaurant_id) REFERENCES restaurant(id)
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+        FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
       );
 
       CREATE TABLE restaurant_review_replies (
@@ -21,8 +21,8 @@ export class RestaurantReviewReply1711557648016 implements MigrationInterface {
         user_type varchar(255) NOT NULL, 
         restaurant_review_id INT NOT NULL, 
         comment TEXT, 
-        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
         FOREIGN KEY (restaurant_review_id) REFERENCES restaurant_reviews(id)
       );
     `);

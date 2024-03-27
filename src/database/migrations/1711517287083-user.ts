@@ -33,15 +33,17 @@ export class User1711517287083 implements MigrationInterface {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+
+      INSERT INTO admins(name,email,password,roles) values('superadmin','superadmin@gmail.com','$2b$10$cU4Ljg5qV2NJHgLxA7/O9uMcVXDjRRtXzkITuG3Uekue1S7kQYUhG','["superadmin"]');
       
       `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-         DROP TABLE IF EXISTS "vendor";
-         DROP TABLE IF EXISTS "customer";
-         DROP TABLE IF EXISTS "admin";
+         DROP TABLE IF EXISTS "vendors";
+         DROP TABLE IF EXISTS "customers";
+         DROP TABLE IF EXISTS "admins";
     `);
   }
 }
