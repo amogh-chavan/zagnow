@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 
-@Entity('restaurant') // Name of the database table
+@Entity('restaurants') // Name of the database table
 export class Restaurant extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;

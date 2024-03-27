@@ -15,6 +15,7 @@ async function bootstrap() {
   );
   app.enableCors({ origin: '*', allowedHeaders: '*', methods: '*' });
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('/api');
   setupSwagger(app);
   const port = envConfigService.get('PORT');
   await app.listen(port, () => {

@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 import { VendorRoles } from '../enum';
 
-@Entity('vendor') // Name of the database table
+@Entity('vendors') // Name of the database table
 export class Vendor extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
@@ -17,6 +17,9 @@ export class Vendor extends BaseEntity {
 
   @Column({ type: 'jsonb', nullable: false })
   roles: VendorRoles[];
+
+  @Column({ type: 'numeric', nullable: true })
+  restaurant_id: number;
 
   @Column({ nullable: false, default: false })
   is_deleted: boolean;

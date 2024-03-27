@@ -128,6 +128,7 @@ export class VendorService {
       email: vendor.email,
       user_type: UserType.VENDOR,
       roles: vendor.roles,
+      restaurant_id: vendor.restaurant_id,
     };
     const accessToken = this.jwtService.sign(payload);
 

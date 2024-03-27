@@ -16,5 +16,6 @@ import { AccessContorlService } from './access-control.service';
   ],
   controllers: [VendorController],
   providers: [VendorService, AccessContorlService],
+  exports: [VendorService, AccessContorlService],
 })
 export class VendorModule {}

@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class User1711517287083 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-    CREATE TABLE IF NOT EXISTS "vendor" (
+    CREATE TABLE IF NOT EXISTS "vendors" (
         id bigserial NOT NULL PRIMARY KEY, 
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 
@@ -14,7 +14,7 @@ export class User1711517287083 implements MigrationInterface {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-      CREATE TABLE IF NOT EXISTS "customer" (
+      CREATE TABLE IF NOT EXISTS "customers" (
         id bigserial NOT NULL PRIMARY KEY, 
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 
@@ -23,7 +23,7 @@ export class User1711517287083 implements MigrationInterface {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-      CREATE TABLE IF NOT EXISTS "admin" (
+      CREATE TABLE IF NOT EXISTS "admins" (
         id bigserial NOT NULL PRIMARY KEY, 
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 

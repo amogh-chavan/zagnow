@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class Restaurant1711553346931 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-        CREATE TABLE IF NOT EXISTS "restaurant" (
+        CREATE TABLE IF NOT EXISTS "restaurants" (
             id bigserial NOT NULL PRIMARY KEY, 
             listing_name VARCHAR(255) NOT NULL, 
             business_phone VARCHAR(255) NOT NULL, 

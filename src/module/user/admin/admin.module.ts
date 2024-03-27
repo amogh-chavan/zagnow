@@ -16,5 +16,6 @@ import { AccessContorlService } from './access-control.service';
   ],
   controllers: [AdminController],
   providers: [AdminService, AccessContorlService],
+  exports: [AdminService, AccessContorlService],
 })
 export class AdminModule {}

@@ -6,4 +6,5 @@ export interface VendorTokenPayload {
   email: string;
   user_type: UserType.VENDOR;
   roles: VendorRoles[];
+  restaurant_id: number;
 }

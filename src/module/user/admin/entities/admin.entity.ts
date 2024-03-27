@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 import { AdminRoles } from '../enum';
 
-@Entity('admin') // Name of the database table
+@Entity('admins') // Name of the database table
 export class Admin extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
