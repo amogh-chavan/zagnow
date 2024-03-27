@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { AdminRoles } from '../enum';
 
 @Entity('admin') // Name of the database table
 export class Admin extends BaseEntity {
@@ -13,6 +14,9 @@ export class Admin extends BaseEntity {
 
   @Column({ nullable: false })
   password: string; // Consider using a separate entity/service for password hashing
+
+  @Column({ type: 'jsonb', nullable: false })
+  roles: AdminRoles[];
 
   @Column({ nullable: false, default: false })
   is_deleted: boolean;

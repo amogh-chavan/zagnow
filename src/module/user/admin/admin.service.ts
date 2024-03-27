@@ -12,7 +12,7 @@ import * as bcrypt from 'bcrypt'; // For secure password hashing
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserType } from 'src/shared/enums/user_type';
-import { AdminRoles } from './enum';
+
 import { AdminTokenPayload } from './types';
 
 @Injectable()
@@ -129,7 +129,7 @@ export class AdminService {
       id: admin.id,
       email: admin.email,
       user_type: UserType.ADMIN,
-      roles: [AdminRoles.SUPERADMIN],
+      roles: admin.roles,
     };
     const accessToken = this.jwtService.sign(payload);
 
