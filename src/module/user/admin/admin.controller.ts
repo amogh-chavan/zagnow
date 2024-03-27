@@ -12,6 +12,7 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { ApiTags } from '@nestjs/swagger';
 import ApiResponse from 'src/shared/dto/api_response.dto';
+import { LoginAdminDto } from './dto/login-admin.dto';
 
 @Controller('user/admin')
 @ApiTags('Admin')
@@ -43,5 +44,11 @@ export class AdminController {
   async remove(@Param('id') id: string) {
     const data = await this.adminService.remove(+id);
     return new ApiResponse(true, data, 'Admin Deleted');
+  }
+
+  @Post('/auth/login')
+  async login(@Body() loginAdminDto: LoginAdminDto) {
+    const data = await this.adminService.login(loginAdminDto);
+    return new ApiResponse(true, data, 'Admin logged in');
   }
 }

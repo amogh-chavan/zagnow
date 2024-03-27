@@ -5,23 +5,29 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { Admin } from './entities/admin.entity'; // Import your Admin entity
 import * as bcrypt from 'bcrypt'; // For secure password hashing
+import { LoginAdminDto } from './dto/login-admin.dto';
+import { JwtService } from '@nestjs/jwt';
+import { UserType } from 'src/shared/enums/user_type';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(Admin)
     private readonly adminRepository: Repository<Admin>,
+    private jwtService: JwtService,
   ) {}
 
   async create(createAdminDto: CreateAdminDto): Promise<{
     id: Admin['id'];
   }> {
-    const existingAdmin = this.adminRepository.findOne({
+    const existingAdmin = await this.adminRepository.findOne({
       where: {
         email: createAdminDto.email,
         is_deleted: false,
       },
+      select: ['id', 'name', 'email'],
     });
+    console.log({ existingAdmin });
     if (existingAdmin) {
       throw new BadRequestException('Admin with given email already exists');
     }
@@ -30,8 +36,8 @@ export class AdminService {
     newAdmin.email = createAdminDto.email;
 
     // Secure password hashing before saving
-    const salt = await bcrypt.genSalt(10); // Adjust salt rounds as needed
-    newAdmin.password = await bcrypt.hash(createAdminDto.password, salt);
+
+    newAdmin.password = await bcrypt.hash(createAdminDto.password, 10);
 
     const admin = await this.adminRepository.save(newAdmin);
 
@@ -46,6 +52,7 @@ export class AdminService {
         id,
         is_deleted: false,
       },
+      select: ['id', 'name', 'email'],
     });
   }
 
@@ -58,6 +65,7 @@ export class AdminService {
         id,
         is_deleted: false,
       },
+      select: ['id', 'name', 'email'],
     });
 
     if (!existingAdmin) {
@@ -68,8 +76,7 @@ export class AdminService {
 
     // If password is provided, update it securely
     if (updateAdminDto.password) {
-      const salt = await bcrypt.genSalt(10);
-      existingAdmin.password = await bcrypt.hash(updateAdminDto.password, salt);
+      existingAdmin.password = await bcrypt.hash(updateAdminDto.password, 10);
     }
 
     return await this.adminRepository.save(existingAdmin);
@@ -81,6 +88,7 @@ export class AdminService {
         id,
         is_deleted: false,
       },
+      select: ['id', 'name', 'email'],
     });
     if (adminToDelete) {
       // Consider soft deletion (set is_deleted to true) instead of permanent removal
@@ -88,5 +96,36 @@ export class AdminService {
       adminToDelete.is_deleted = true;
       await this.adminRepository.save(adminToDelete);
     }
+  }
+
+  async login(
+    loginAdminDto: LoginAdminDto,
+  ): Promise<{ id: number; name: string; accessToken: string }> {
+    const { email, password } = loginAdminDto;
+
+    const admin = await this.adminRepository.findOne({
+      where: {
+        email,
+        is_deleted: false,
+      },
+    });
+
+    if (!admin) {
+      throw new BadRequestException('Invalid email or password');
+    }
+
+    const matched = await bcrypt.compare(password, admin.password);
+    if (!matched) {
+      throw new BadRequestException('Invalid email or password');
+    }
+
+    const payload = {
+      id: admin.id,
+      email: admin.email,
+      user_type: UserType.ADMIN,
+    };
+    const accessToken = this.jwtService.sign(payload);
+
+    return { id: admin.id, name: admin.name, accessToken };
   }
 }
