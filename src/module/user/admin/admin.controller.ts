@@ -24,23 +24,24 @@ export class AdminController {
     return new ApiResponse(true, data, 'Admin created');
   }
 
-  @Get()
-  findAll() {
-    return this.adminService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adminService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.adminService.findOne(+id);
+    return new ApiResponse(true, data, 'Admin Fetched');
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminService.update(+id, updateAdminDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateAdminDto: UpdateAdminDto,
+  ) {
+    const data = await this.adminService.update(+id, updateAdminDto);
+    return new ApiResponse(true, data, 'Admin Updated');
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const data = await this.adminService.remove(+id);
+    return new ApiResponse(true, data, 'Admin Deleted');
   }
 }

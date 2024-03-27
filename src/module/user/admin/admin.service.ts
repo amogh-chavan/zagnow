@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAdminDto } from './dto/create-admin.dto';
@@ -13,7 +13,18 @@ export class AdminService {
     private readonly adminRepository: Repository<Admin>,
   ) {}
 
-  async create(createAdminDto: CreateAdminDto): Promise<Admin> {
+  async create(createAdminDto: CreateAdminDto): Promise<{
+    id: Admin['id'];
+  }> {
+    const existingAdmin = this.adminRepository.findOne({
+      where: {
+        email: createAdminDto.email,
+        is_deleted: false,
+      },
+    });
+    if (existingAdmin) {
+      throw new BadRequestException('Admin with given email already exists');
+    }
     const newAdmin = new Admin();
     newAdmin.name = createAdminDto.name;
     newAdmin.email = createAdminDto.email;
@@ -22,17 +33,18 @@ export class AdminService {
     const salt = await bcrypt.genSalt(10); // Adjust salt rounds as needed
     newAdmin.password = await bcrypt.hash(createAdminDto.password, salt);
 
-    return await this.adminRepository.save(newAdmin);
+    const admin = await this.adminRepository.save(newAdmin);
+
+    return {
+      id: admin.id,
+    };
   }
 
-  findAll(): Promise<Admin[]> {
-    return this.adminRepository.find();
-  }
-
-  findOne(id: number): Promise<Admin | undefined> {
+  async findOne(id: number): Promise<Admin | undefined> {
     return this.adminRepository.findOne({
       where: {
         id,
+        is_deleted: false,
       },
     });
   }
@@ -44,10 +56,12 @@ export class AdminService {
     const existingAdmin = await this.adminRepository.findOne({
       where: {
         id,
+        is_deleted: false,
       },
     });
+
     if (!existingAdmin) {
-      return undefined;
+      throw new BadRequestException('Admin not found');
     }
 
     existingAdmin.name = updateAdminDto.name || existingAdmin.name;
@@ -65,6 +79,7 @@ export class AdminService {
     const adminToDelete = await this.adminRepository.findOne({
       where: {
         id,
+        is_deleted: false,
       },
     });
     if (adminToDelete) {

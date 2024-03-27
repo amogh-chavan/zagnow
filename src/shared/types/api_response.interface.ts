@@ -1,5 +1,5 @@
 interface IApiResponse<T> {
-  success: boolean;
+  status: boolean;
   message: string;
   data: T;
 }
