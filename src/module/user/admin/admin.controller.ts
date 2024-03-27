@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import ApiResponse from 'src/shared/dto/api_response.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
+import { AuthGuard } from './auth.gaurd';
+import { TOKEN_NAME } from 'src/constant/variable.constant';
 
 @Controller('user/admin')
 @ApiTags('Admin')
@@ -26,12 +29,16 @@ export class AdminController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth(TOKEN_NAME)
   async findOne(@Param('id') id: string) {
     const data = await this.adminService.findOne(+id);
     return new ApiResponse(true, data, 'Admin Fetched');
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth(TOKEN_NAME)
   async update(
     @Param('id') id: string,
     @Body() updateAdminDto: UpdateAdminDto,
@@ -41,6 +48,8 @@ export class AdminController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth(TOKEN_NAME)
   async remove(@Param('id') id: string) {
     const data = await this.adminService.remove(+id);
     return new ApiResponse(true, data, 'Admin Deleted');

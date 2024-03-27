@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
     TypeOrmModule.forFeature([Admin]),
     JwtModule.register({
       secret: 'adminsecret',
-      signOptions: { expiresIn: '1m' },
+      signOptions: { expiresIn: '2d' },
     }),
   ],
   controllers: [AdminController],

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAdminDto } from './dto/create-admin.dto';
@@ -127,5 +131,15 @@ export class AdminService {
     const accessToken = this.jwtService.sign(payload);
 
     return { id: admin.id, name: admin.name, accessToken };
+  }
+
+  async validateToken(token: string) {
+    try {
+      const data: any = await this.jwtService.verifyAsync(token);
+
+      return data;
+    } catch (error) {
+      throw new UnauthorizedException('Authorization Error');
+    }
   }
 }
