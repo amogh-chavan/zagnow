@@ -76,7 +76,8 @@ export class VendorService {
     }
 
     existingVendor.name = updateVendorDto.name || existingVendor.name;
-
+    existingVendor.restaurant_id =
+      updateVendorDto.restaurant_id || existingVendor.restaurant_id;
     // If password is provided, update it securely
     if (updateVendorDto.password) {
       existingVendor.password = await bcrypt.hash(updateVendorDto.password, 10);

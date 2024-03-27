@@ -6,6 +6,7 @@ import {
   IsString,
   Min,
   Max,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateRestaurantReviewDto {
@@ -18,7 +19,7 @@ export class CreateRestaurantReviewDto {
   restaurant_id?: number;
 
   @ApiProperty({ description: 'Rating for the restaurant (1-5)' })
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
   @Min(1)
   @Max(5)

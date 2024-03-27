@@ -6,6 +6,7 @@ import {
   Patch,
   UseGuards,
   Req,
+  Param,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -21,19 +22,31 @@ import { VendorTokenPayload } from '../user/vendor/types';
 import ApiResponse from 'src/shared/dto/api_response.dto';
 import { CreateRestaurantReviewReplyDto } from './dto/create-restaurant-review-reply.dto';
 import { RestaurantReviewReply } from './entities/restaurant_replies.entity';
+import { VendorService } from '../user/vendor/vendor.service';
+import { UpdateVendorDto } from '../user/vendor/dto/update-vendor.dto';
 
 @ApiTags('Restaurant')
 @Controller('vendor/restaurant')
 export class RestaurantVendorController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(
+    private readonly restaurantService: RestaurantService,
+    private readonly vendorService: VendorService,
+  ) {}
 
   @Post()
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  async create(@Body() createRestaurantDto: CreateRestaurantDto) {
+  async create(
+    @Req() request: RequestTokenPayload,
+    @Body() createRestaurantDto: CreateRestaurantDto,
+  ) {
+    const { id } = request.data as VendorTokenPayload;
     const data =
       await this.restaurantService.createRestaurant(createRestaurantDto);
+    await this.vendorService.update(id, {
+      restaurant_id: data.id,
+    } as UpdateVendorDto);
     return new ApiResponse(true, data, 'Restaurant created');
   }
 
@@ -80,13 +93,15 @@ export class RestaurantVendorController {
   @ApiBearerAuth(TOKEN_NAME)
   async createReviewReply(
     @Req() request: RequestTokenPayload,
+    @Param('id') id: string,
     @Body() createRestaurantReviewReplyDto: CreateRestaurantReviewReplyDto,
   ) {
-    const { id, user_type } = request.data as VendorTokenPayload;
+    const tokenData = request.data as VendorTokenPayload;
     const data = await this.restaurantService.createReviewReply({
       ...createRestaurantReviewReplyDto,
-      user_type,
-      user_id: id,
+      restaurant_review_id: +id,
+      user_type: tokenData.user_type,
+      user_id: tokenData.id,
     } as RestaurantReviewReply);
     return new ApiResponse(true, data, 'Restaurant updated');
   }

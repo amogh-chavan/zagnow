@@ -24,7 +24,6 @@ export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   async create(@Body() createCustomerDto: CreateCustomerDto) {
     const data = await this.customerService.create(createCustomerDto);
     return new ApiResponse(true, data, 'Customer created');

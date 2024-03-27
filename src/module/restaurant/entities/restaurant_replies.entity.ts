@@ -17,6 +17,9 @@ export class RestaurantReviewReply extends BaseEntity {
   @Column({ type: 'text', nullable: false })
   comment: string;
 
+  @Column({ nullable: false, default: false })
+  is_deleted: boolean;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 

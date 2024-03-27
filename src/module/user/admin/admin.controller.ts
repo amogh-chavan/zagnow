@@ -28,6 +28,7 @@ export class AdminController {
   @Post()
   @Roles(AdminRoles.SUPERADMIN)
   @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth(TOKEN_NAME)
   async create(@Body() createAdminDto: CreateAdminDto) {
     const data = await this.adminService.create(createAdminDto);
     return new ApiResponse(true, data, 'Admin created');

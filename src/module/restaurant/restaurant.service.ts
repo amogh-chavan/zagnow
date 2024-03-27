@@ -68,6 +68,16 @@ export class RestaurantService {
   }
 
   async createReview(review: RestaurantReview): Promise<RestaurantReview> {
+    const restaurant = await this.restaurantRepository.findOne({
+      where: {
+        id: review.restaurant_id,
+        is_deleted: false,
+      },
+    });
+    if (!restaurant) {
+      throw new BadRequestException('Restaurant not found');
+    }
+    console.log({ review });
     const restaurant_review = this.restaurantReviewRepository.create(review);
     return await this.restaurantReviewRepository.save(restaurant_review);
   }
@@ -98,8 +108,19 @@ export class RestaurantService {
   async createReviewReply(
     review_reply: RestaurantReviewReply,
   ): Promise<RestaurantReviewReply> {
+    const restaurant = await this.restaurantReviewRepository.findOne({
+      where: {
+        id: review_reply.id,
+        is_deleted: false,
+      },
+    });
+    if (!restaurant) {
+      throw new BadRequestException('Restaurant not found');
+    }
+    console.log({ review_reply });
     const restaurantReviewReply =
       this.restaurantReviewReplyRepository.create(review_reply);
+    console.log({ restaurantReviewReply });
     return await this.restaurantReviewReplyRepository.save(
       restaurantReviewReply,
     );

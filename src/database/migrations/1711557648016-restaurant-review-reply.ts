@@ -8,8 +8,9 @@ export class RestaurantReviewReply1711557648016 implements MigrationInterface {
         user_id bigint NOT NULL, 
         user_type varchar(255) NOT NULL, 
         restaurant_id bigint DEFAULT NULL, 
-        rating int NOT NULL, 
+        rating flaot NOT NULL, 
         comment varchar(255), 
+        is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
         FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
@@ -21,6 +22,7 @@ export class RestaurantReviewReply1711557648016 implements MigrationInterface {
         user_type varchar(255) NOT NULL, 
         restaurant_review_id INT NOT NULL, 
         comment TEXT, 
+        is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
         FOREIGN KEY (restaurant_review_id) REFERENCES restaurant_reviews(id)

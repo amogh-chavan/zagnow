@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
@@ -16,6 +17,8 @@ import { CreateRestaurantReviewDto } from './dto/create-restaurant-review.dto';
 import { RestaurantReview } from './entities/restaurant_review.entity';
 import { UpdateRestaurantReviewDto } from './dto/update-restaurant-review.dto';
 import ApiResponse from 'src/shared/dto/api_response.dto';
+import { RequestTokenPayload } from 'src/shared/types/request';
+import { CustomerTokenPayload } from '../user/customer/types';
 
 @ApiTags('Restaurant')
 @Controller('/restaurant')
@@ -42,12 +45,16 @@ export class RestaurantCustomerController {
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async createReview(
+    @Req() request: RequestTokenPayload,
     @Param('id') id: string,
     @Body() createRestaurantReviewDto: CreateRestaurantReviewDto,
   ) {
+    const tokenData = request.data as CustomerTokenPayload;
     const data = await this.restaurantService.createReview({
       ...createRestaurantReviewDto,
       restaurant_id: +id,
+      user_id: tokenData.id,
+      user_type: tokenData.user_type,
     } as RestaurantReview);
     return new ApiResponse(true, data, 'Restaurant review created');
   }
