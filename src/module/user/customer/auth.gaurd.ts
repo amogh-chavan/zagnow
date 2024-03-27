@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     }
     const authToken = authorization.replace(/bearer/gim, '').trim();
     const data = await this.customerService.validateToken(authToken);
-    if (data.user_type !== UserType.ADMIN) {
+    if (data.user_type !== UserType.CUSTOMER) {
       throw new UnauthorizedException('Authorization Error');
     }
     request.data = data;

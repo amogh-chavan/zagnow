@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 
-@Entity('Customer') // Name of the database table
+@Entity('customer') // Name of the database table
 export class Customer extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;

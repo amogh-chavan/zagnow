@@ -40,7 +40,7 @@ export class AdminService {
     const newAdmin = new Admin();
     newAdmin.name = createAdminDto.name;
     newAdmin.email = createAdminDto.email;
-
+    newAdmin.roles = createAdminDto.roles;
     // Secure password hashing before saving
 
     newAdmin.password = await bcrypt.hash(createAdminDto.password, 10);
@@ -62,10 +62,7 @@ export class AdminService {
     });
   }
 
-  async update(
-    id: number,
-    updateAdminDto: UpdateAdminDto,
-  ): Promise<Admin | undefined> {
+  async update(id: number, updateAdminDto: UpdateAdminDto): Promise<void> {
     const existingAdmin = await this.adminRepository.findOne({
       where: {
         id,
@@ -85,7 +82,8 @@ export class AdminService {
       existingAdmin.password = await bcrypt.hash(updateAdminDto.password, 10);
     }
 
-    return await this.adminRepository.save(existingAdmin);
+    await this.adminRepository.save(existingAdmin);
+    return;
   }
 
   async remove(id: number): Promise<void> {

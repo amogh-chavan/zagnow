@@ -65,7 +65,7 @@ export class CustomerService {
   async update(
     id: number,
     updateCustomerDto: UpdateCustomerDto,
-  ): Promise<Customer | undefined> {
+  ): Promise<void> {
     const existingCustomer = await this.customerRepository.findOne({
       where: {
         id,
@@ -88,7 +88,8 @@ export class CustomerService {
       );
     }
 
-    return await this.customerRepository.save(existingCustomer);
+    await this.customerRepository.save(existingCustomer);
+    return;
   }
 
   async remove(id: number): Promise<void> {

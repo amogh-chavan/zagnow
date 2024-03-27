@@ -40,7 +40,7 @@ export class VendorService {
     const newVendor = new Vendor();
     newVendor.name = createVendorDto.name;
     newVendor.email = createVendorDto.email;
-
+    newVendor.roles = createVendorDto.roles;
     // Secure password hashing before saving
 
     newVendor.password = await bcrypt.hash(createVendorDto.password, 10);
@@ -62,10 +62,7 @@ export class VendorService {
     });
   }
 
-  async update(
-    id: number,
-    updateVendorDto: UpdateVendorDto,
-  ): Promise<Vendor | undefined> {
+  async update(id: number, updateVendorDto: UpdateVendorDto): Promise<void> {
     const existingVendor = await this.vendorRepository.findOne({
       where: {
         id,
@@ -85,7 +82,8 @@ export class VendorService {
       existingVendor.password = await bcrypt.hash(updateVendorDto.password, 10);
     }
 
-    return await this.vendorRepository.save(existingVendor);
+    await this.vendorRepository.save(existingVendor);
+    return;
   }
 
   async remove(id: number): Promise<void> {

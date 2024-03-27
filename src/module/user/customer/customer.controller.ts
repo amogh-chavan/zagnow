@@ -4,9 +4,9 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -16,6 +16,7 @@ import ApiResponse from 'src/shared/dto/api_response.dto';
 import { LoginCustomerDto } from './dto/login-customer.dto';
 import { AuthGuard } from './auth.gaurd';
 import { TOKEN_NAME } from 'src/constant/variable.constant';
+import { RequestTokenPayload } from 'src/shared/types/request';
 
 @Controller('user/customer')
 @ApiTags('Customer')
@@ -29,30 +30,33 @@ export class CustomerController {
     return new ApiResponse(true, data, 'Customer created');
   }
 
-  @Get(':id')
+  @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  async findOne(@Param('id') id: string) {
-    const data = await this.customerService.findOne(+id);
+  async findOne(@Req() request: RequestTokenPayload) {
+    const data = await this.customerService.findOne(request.data.id);
     return new ApiResponse(true, data, 'Customer Fetched');
   }
 
-  @Patch(':id')
+  @Patch()
   @UseGuards(AuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async update(
-    @Param('id') id: string,
+    @Req() request: RequestTokenPayload,
     @Body() updateCustomerDto: UpdateCustomerDto,
   ) {
-    const data = await this.customerService.update(+id, updateCustomerDto);
+    const data = await this.customerService.update(
+      request.data.id,
+      updateCustomerDto,
+    );
     return new ApiResponse(true, data, 'Customer Updated');
   }
 
-  @Delete(':id')
+  @Delete()
   @UseGuards(AuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  async remove(@Param('id') id: string) {
-    const data = await this.customerService.remove(+id);
+  async remove(@Req() request: RequestTokenPayload) {
+    const data = await this.customerService.remove(request.data.id);
     return new ApiResponse(true, data, 'Customer Deleted');
   }
 

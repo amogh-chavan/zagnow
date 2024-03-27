@@ -8,8 +8,8 @@ export class User1711517287083 implements MigrationInterface {
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 
         password VARCHAR(255) NOT NULL, 
-        restaurant_id bigint NOT NULL, 
-        roles jsonb NOT NULL DEFAULT '["manager"]'::json,
+        restaurant_id bigint NULL, 
+        roles jsonb NOT NULL,
         is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -28,7 +28,7 @@ export class User1711517287083 implements MigrationInterface {
         name VARCHAR(255) NOT NULL, 
         email VARCHAR(255) NOT NULL, 
         password VARCHAR(255) NOT NULL, 
-        roles jsonb NOT NULL DEFAULT '["admin"]'::json,
+        roles jsonb NOT NULL DEFAULT '["admin"]'::jsonb,
         is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
