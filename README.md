@@ -76,7 +76,7 @@ Nest is [MIT licensed](LICENSE).
 
 ```bash
 # creating new api module
-$ nest generate module module_name api
+$ nest generate module module_name module
 ```
 
 ## Database Migration commands
