@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class UpdateVendorDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @ApiProperty()
   name: string;

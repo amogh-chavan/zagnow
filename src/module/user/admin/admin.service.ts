@@ -81,6 +81,8 @@ export class AdminService {
       existingAdmin.password = await bcrypt.hash(updateAdminDto.password, 10);
     }
 
+    existingAdmin.updated_at = new Date();
+
     await this.adminRepository.save(existingAdmin);
     return;
   }
@@ -97,6 +99,7 @@ export class AdminService {
       // Consider soft deletion (set is_deleted to true) instead of permanent removal
       // await this.adminRepository.remove(adminToDelete); // For permanent deletion
       adminToDelete.is_deleted = true;
+      adminToDelete.updated_at = new Date();
       await this.adminRepository.save(adminToDelete);
     }
   }

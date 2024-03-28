@@ -87,7 +87,7 @@ export class CustomerService {
         10,
       );
     }
-
+    existingCustomer.updated_at = new Date();
     await this.customerRepository.save(existingCustomer);
     return;
   }
@@ -104,6 +104,7 @@ export class CustomerService {
       // Consider soft deletion (set is_deleted to true) instead of permanent removal
       // await this.customerRepository.remove(customerToDelete); // For permanent deletion
       customerToDelete.is_deleted = true;
+      customerToDelete.updated_at = new Date();
       await this.customerRepository.save(customerToDelete);
     }
   }

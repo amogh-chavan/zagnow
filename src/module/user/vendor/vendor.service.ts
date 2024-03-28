@@ -33,7 +33,7 @@ export class VendorService {
       },
       select: ['id', 'name', 'email'],
     });
-    console.log({ existingVendor });
+
     if (existingVendor) {
       throw new BadRequestException('Vendor with given email already exists');
     }
@@ -81,7 +81,7 @@ export class VendorService {
     if (updateVendorDto.password) {
       existingVendor.password = await bcrypt.hash(updateVendorDto.password, 10);
     }
-
+    existingVendor.updated_at = new Date();
     await this.vendorRepository.save(existingVendor);
     return;
   }
@@ -115,7 +115,7 @@ export class VendorService {
 
     existingVendor.restaurant_id =
       restaurant_id || existingVendor.restaurant_id;
-
+    existingVendor.updated_at = new Date();
     await this.vendorRepository.save(existingVendor);
     return;
   }
@@ -132,6 +132,7 @@ export class VendorService {
       // Consider soft deletion (set is_deleted to true) instead of permanent removal
       // await this.vendorRepository.remove(vendorToDelete); // For permanent deletion
       vendorToDelete.is_deleted = true;
+      vendorToDelete.updated_at = new Date();
       await this.vendorRepository.save(vendorToDelete);
     }
   }
