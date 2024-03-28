@@ -10,7 +10,7 @@ We are a discovery platform operating in the digital commerce space in India. We
 
 There is much room for improvement and scaling in this code, but due to current time restrictions, this is the best I have done.
 
-## Run the below command to run the project if you have a ubuntu os
+## Run the below command to run the project if you have a ubuntu os (.env file is already avaiable in git repo)
 ```bash
 $ docker build -t my_postgres_pgadmin_image . && docker run -d -p 5435:5432 -p 5052:5050 --name my_postgres_pgadmin_container my_postgres_pgadmin_image && npm install && npm run build && node dist/main.js 
 ```
