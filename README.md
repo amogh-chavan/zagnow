@@ -1,3 +1,76 @@
+## ZagNow
+We are a discovery platform operating in the digital commerce space in India. We help consumers discover, connect and shop with millions of local products and services. #vocalforlocal #madeinIndia
+
+## Project Highling Features
+
+⭐ Database Migrations - Database entities can easily migrate to new changes.
+⭐ Isolation - Each entity (vendor, customer, admin, restaurant, reviews) has a separate API and database table.
+⭐ Secure - With the help of role guard and auth guard, all the APIs are secured.
+⭐ Code Organization - All entities have their own separate module, which makes it easy to maintain.
+
+There is much room for improvement and scaling in this code, but due to current time restrictions, this is the best I have done.
+
+## Run the below command to run the project if you have a ubuntu os (.env file is already avaiable in git repo)
+```bash
+$ docker build -t my_postgres_pgadmin_image . && docker run -d -p 5435:5432 -p 5052:5050 --name my_postgres_pgadmin_container my_postgres_pgadmin_image && npm install && npm run build && node dist/main.js 
+```
+You can also install pgAdmin tool to view database ui
+
+
+## Nestjs project breakdown
+![image](https://github.com/amogh-chavan/zagnow/assets/55050758/c98b8391-c4f2-44dd-afb0-f238b89cdd4b)
+
+
+
+
+## Database ERD 
+![Untitled](https://github.com/amogh-chavan/zagnow/assets/55050758/d2c47f30-c006-4bad-8a17-bb7f8d298c24)
+
+## Swagger Link
+http://localhost:5000/docs
+![image](https://github.com/amogh-chavan/zagnow/assets/55050758/12b491d6-a1e7-4720-b71f-9dfb71124880)
+![image](https://github.com/amogh-chavan/zagnow/assets/55050758/22e747e2-d8e8-4527-8857-917a8f729976)
+
+## Techstack
+Typescript
+Nestjs
+Postgres - TypeORM
+
+
+## Installation
+
+```bash
+$ npm install
+```
+
+## Running the app
+
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
+```
+
+## Generating module
+```bash
+# creating new api module
+$ nest generate module module_name module
+```
+
+## Database Migration commands
+
+```bash
+# creating new migration file
+$ npm run migration:create --name=migration_name
+
+# running new migration files
+$ npm run migration:run
+```
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -25,66 +98,3 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
-
-## Nest CLI commands for project
-
-```bash
-# creating new api module
-$ nest generate module module_name module
-```
-
-## Database Migration commands
-
-```bash
-# creating new migration file
-$ npm run migration:create --name=migration_name
-
-# running new migration files
-$ npm run migration:run
-```
