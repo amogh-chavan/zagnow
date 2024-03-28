@@ -10,6 +10,17 @@ We are a discovery platform operating in the digital commerce space in India. We
 
 There is much room for improvement and scaling in this code, but due to current time restrictions, this is the best I have done.
 
+## Run the below command to run the project if you have a ubuntu os
+```bash
+$ docker build -t my_postgres_pgadmin_image . && docker run -d -p 5435:5432 -p 5052:5050 --name my_postgres_pgadmin_container my_postgres_pgadmin_image && npm install && npm run build && node dist/main.js 
+```
+You can also install pgAdmin tool to view database ui
+
+
+## Nestjs project breakdown
+![image](https://github.com/amogh-chavan/zagnow/assets/55050758/c98b8391-c4f2-44dd-afb0-f238b89cdd4b)
+
+
 
 
 ## Database ERD 
