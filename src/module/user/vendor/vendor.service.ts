@@ -95,7 +95,7 @@ export class VendorService {
       select: ['id', 'name', 'email'],
     });
 
-    if (!existingRestaurantVendor) {
+    if (existingRestaurantVendor) {
       throw new BadRequestException(
         'Restaurant is already associated with one owner',
       );

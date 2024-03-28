@@ -7,22 +7,22 @@ export class UpdateRestaurantDto {
   @ApiProperty()
   listing_name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty()
   @IsString()
   business_phone: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty()
   @IsString()
   restaurant_address: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty()
   @IsNumber()
   restaurant_latitude: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty()
   @IsNumber()
   restaurant_longitude: number;

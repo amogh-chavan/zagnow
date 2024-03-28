@@ -129,16 +129,16 @@ export class RestaurantService {
   async createReviewReply(
     review_reply: RestaurantReviewReply,
   ): Promise<RestaurantReviewReply> {
-    const restaurant = await this.restaurantReviewRepository.findOne({
+    const restaurant_review = await this.restaurantReviewRepository.findOne({
       where: {
         id: review_reply.id,
         is_deleted: false,
       },
     });
-    if (!restaurant) {
-      throw new BadRequestException('Restaurant not found');
+    if (!restaurant_review) {
+      throw new BadRequestException('Restaurant review not found');
     }
-    console.log({ review_reply });
+
     const restaurantReviewReply =
       this.restaurantReviewReplyRepository.create(review_reply);
     console.log({ restaurantReviewReply });

@@ -7,6 +7,8 @@ import {
   UseGuards,
   Req,
   Param,
+  BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -40,7 +42,13 @@ export class RestaurantVendorController {
     @Req() request: RequestTokenPayload,
     @Body() createRestaurantDto: CreateRestaurantDto,
   ) {
-    const { id } = request.data as VendorTokenPayload;
+    const { id, restaurant_id } = request.data as VendorTokenPayload;
+
+    if (restaurant_id) {
+      throw new BadRequestException(
+        'Restaurant already associated with vendor',
+      );
+    }
     const data =
       await this.restaurantService.createRestaurant(createRestaurantDto);
     await this.vendorService.updateRestaurantId(id, data.id);
@@ -53,6 +61,11 @@ export class RestaurantVendorController {
   @ApiBearerAuth(TOKEN_NAME)
   async readVendorRestaurant(@Req() request: RequestTokenPayload) {
     const { restaurant_id } = request.data as VendorTokenPayload;
+    if (!restaurant_id) {
+      throw new UnauthorizedException(
+        'Restaurant not found,Please login again',
+      );
+    }
     const data = await this.restaurantService.findOne(restaurant_id);
     return new ApiResponse(true, data, 'Restaurant fetched');
   }
@@ -66,6 +79,11 @@ export class RestaurantVendorController {
     @Body() updateRestaurantDto: UpdateRestaurantDto,
   ) {
     const { restaurant_id } = request.data as VendorTokenPayload;
+    if (!restaurant_id) {
+      throw new UnauthorizedException(
+        'Restaurant not found,Please login again',
+      );
+    }
     const data = await this.restaurantService.update(
       restaurant_id,
       updateRestaurantDto,
@@ -79,6 +97,11 @@ export class RestaurantVendorController {
   @ApiBearerAuth(TOKEN_NAME)
   async readAllReviews(@Req() request: RequestTokenPayload) {
     const { restaurant_id } = request.data as VendorTokenPayload;
+    if (!restaurant_id) {
+      throw new UnauthorizedException(
+        'Restaurant not found,Please login again',
+      );
+    }
     const data =
       await this.restaurantService.readRestaurantReviews(restaurant_id);
     return new ApiResponse(true, data, 'Restaurant updated');
