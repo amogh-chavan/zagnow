@@ -41,6 +41,14 @@ export class RestaurantCustomerController {
     return new ApiResponse(true, data, 'Restaurant reviews fetched');
   }
 
+  @Get('/review/:id/replies')
+  @UseGuards(CustomerAuthGuard)
+  @ApiBearerAuth(TOKEN_NAME)
+  async readRestaurantReviewReplies(@Param('id') id: string) {
+    const data = await this.restaurantService.readRestaurantReviewReplies(+id);
+    return new ApiResponse(true, data, 'Restaurant reviews fetched');
+  }
+
   @Post('/:id/review')
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)

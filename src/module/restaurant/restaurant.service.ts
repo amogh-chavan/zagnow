@@ -105,7 +105,7 @@ export class RestaurantService {
     if (!restaurant) {
       throw new BadRequestException('Restaurant not found');
     }
-    console.log({ review });
+
     const restaurant_review = this.restaurantReviewRepository.create(review);
     return await this.restaurantReviewRepository.save(restaurant_review);
   }
@@ -158,11 +158,35 @@ export class RestaurantService {
     }
   }
 
+  async readRestaurantReviewReplies(
+    review_id: number,
+  ): Promise<RestaurantReviewReply[]> {
+    const restaurant = await this.restaurantReviewRepository.findOne({
+      where: {
+        id: review_id,
+        is_deleted: false,
+      },
+    });
+
+    if (!restaurant) {
+      throw new BadRequestException('Restaurant review not found');
+    }
+    return await this.restaurantReviewReplyRepository.find({
+      where: {
+        restaurant_review_id: review_id,
+        is_deleted: false,
+      },
+      select: ['id', 'comment', 'created_at', 'updated_at'],
+    });
+  }
+
   async createReviewReply(
+    restaurant_id: number,
     review_reply: RestaurantReviewReply,
   ): Promise<RestaurantReviewReply> {
     const restaurant_review = await this.restaurantReviewRepository.findOne({
       where: {
+        restaurant_id,
         id: review_reply.id,
         is_deleted: false,
       },

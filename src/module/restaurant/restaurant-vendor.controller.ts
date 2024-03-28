@@ -117,12 +117,20 @@ export class RestaurantVendorController {
     @Body() createRestaurantReviewReplyDto: CreateRestaurantReviewReplyDto,
   ) {
     const tokenData = request.data as VendorTokenPayload;
-    const data = await this.restaurantService.createReviewReply({
-      ...createRestaurantReviewReplyDto,
-      restaurant_review_id: +id,
-      user_type: tokenData.user_type,
-      user_id: tokenData.id,
-    } as RestaurantReviewReply);
+    if (!tokenData.restaurant_id) {
+      throw new UnauthorizedException(
+        'Restaurant not found,Please login again',
+      );
+    }
+    const data = await this.restaurantService.createReviewReply(
+      tokenData.restaurant_id,
+      {
+        ...createRestaurantReviewReplyDto,
+        restaurant_review_id: +id,
+        user_type: tokenData.user_type,
+        user_id: tokenData.id,
+      } as RestaurantReviewReply,
+    );
     return new ApiResponse(true, data, 'Restaurant updated');
   }
 }
