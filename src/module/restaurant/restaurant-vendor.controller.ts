@@ -13,7 +13,7 @@ import {
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { VendorRoles } from '../user/vendor/enum';
 import { Roles as DVendorRoles } from '../user/vendor/role.decorator';
 import { AuthGuard as VendorAuthGuard } from '../user/vendor/auth.gaurd';
@@ -35,6 +35,7 @@ export class RestaurantVendorController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a restaurant as vendor' })
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -56,6 +57,7 @@ export class RestaurantVendorController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Read vendors restaurant as vendor' })
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -71,6 +73,7 @@ export class RestaurantVendorController {
   }
 
   @Patch()
+  @ApiOperation({ summary: 'Update vendors restaurant as vendor' })
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -92,6 +95,7 @@ export class RestaurantVendorController {
   }
 
   @Get('/reviews')
+  @ApiOperation({ summary: 'Read restaurant reviews as vendor' })
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -108,6 +112,7 @@ export class RestaurantVendorController {
   }
 
   @Post('/review/:id/reply')
+  @ApiOperation({ summary: 'Reply to restaurant review as vendor' })
   @DVendorRoles(VendorRoles.OWNER)
   @UseGuards(VendorAuthGuard, VendorRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)

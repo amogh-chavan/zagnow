@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard as CustomerAuthGuard } from '../user/customer/auth.gaurd';
 import { TOKEN_NAME } from 'src/constant/variable.constant';
 import { CreateRestaurantReviewDto } from './dto/create-restaurant-review.dto';
@@ -26,6 +26,7 @@ export class RestaurantCustomerController {
   constructor(private readonly restaurantService: RestaurantService) {}
 
   @Get('/listing')
+  @ApiOperation({ summary: 'Get all active restaurants as customer' })
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async findAll() {
@@ -34,6 +35,9 @@ export class RestaurantCustomerController {
   }
 
   @Get('/:id/reviews')
+  @ApiOperation({
+    summary: 'Get all reviews for a particular restaurant as customer',
+  })
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async readRestaurantReviews(@Param('id') id: string) {
@@ -42,6 +46,9 @@ export class RestaurantCustomerController {
   }
 
   @Get('/review/:id/replies')
+  @ApiOperation({
+    summary: 'Get all review replies as customer',
+  })
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async readRestaurantReviewReplies(@Param('id') id: string) {
@@ -50,6 +57,9 @@ export class RestaurantCustomerController {
   }
 
   @Post('/:id/review')
+  @ApiOperation({
+    summary: 'Create a new review as customer',
+  })
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async createReview(
@@ -68,6 +78,9 @@ export class RestaurantCustomerController {
   }
 
   @Patch('/review/:id')
+  @ApiOperation({
+    summary: 'Update a review as customer',
+  })
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async updateReview(
@@ -86,6 +99,9 @@ export class RestaurantCustomerController {
   }
 
   @Delete('/review/:id')
+  @ApiOperation({
+    summary: 'Delete a review as customer',
+  })
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async deleteReview(

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminRoles } from '../user/admin/enum';
 import { Roles as DAdminRoles } from '../user/admin/role.decorator';
 import { AuthGuard as AdminAuthGuard } from '../user/admin/auth.gaurd';
@@ -36,6 +36,7 @@ export class RestaurantAdminController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a restaurant as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -57,6 +58,7 @@ export class RestaurantAdminController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Find a restaurant as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -66,6 +68,7 @@ export class RestaurantAdminController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a restaurant as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -78,12 +81,14 @@ export class RestaurantAdminController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a restaurant as admin' })
   async remove(@Param('id') id: string) {
     const data = await this.restaurantService.remove(+id);
     return new ApiResponse(true, data, 'Restaurant deleted');
   }
 
   @Post('/:id/review')
+  @ApiOperation({ summary: 'Create a restaurant review as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -103,6 +108,7 @@ export class RestaurantAdminController {
   }
 
   @Get('/:id/reviews')
+  @ApiOperation({ summary: 'Get all restaurant reviews as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -112,6 +118,7 @@ export class RestaurantAdminController {
   }
 
   @Patch('/review/:id')
+  @ApiOperation({ summary: 'Update a restaurant review as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -131,6 +138,7 @@ export class RestaurantAdminController {
   }
 
   @Delete('/review/:id')
+  @ApiOperation({ summary: 'Delete a restaurant review as admin' })
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
