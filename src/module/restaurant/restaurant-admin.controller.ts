@@ -118,8 +118,16 @@ export class RestaurantAdminController {
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  async deleteReview(@Param('id') id: string) {
-    const data = await this.restaurantService.removeReview(+id);
+  async deleteReview(
+    @Req() request: RequestTokenPayload,
+    @Param('id') id: string,
+  ) {
+    const tokenData = request.data as AdminTokenPayload;
+    const data = await this.restaurantService.removeReview(
+      tokenData.id,
+      tokenData.user_type,
+      +id,
+    );
     return new ApiResponse(true, data, 'Restaurant review deleted');
   }
 }

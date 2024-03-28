@@ -31,13 +31,18 @@ export class RestaurantService {
   }
 
   async findAll(): Promise<Restaurant[]> {
-    return await this.restaurantRepository.find();
+    return await this.restaurantRepository.find({
+      where: {
+        is_deleted: false,
+      },
+    });
   }
 
   async findOne(id: number): Promise<Restaurant | undefined> {
     return await this.restaurantRepository.findOne({
       where: {
         id,
+        is_deleted: false,
       },
     });
   }
@@ -74,6 +79,7 @@ export class RestaurantService {
     const restaurant = await this.restaurantRepository.findOne({
       where: {
         id: restaurant_id,
+        is_deleted: false,
       },
     });
 
@@ -83,6 +89,7 @@ export class RestaurantService {
     return await this.restaurantReviewRepository.find({
       where: {
         restaurant_id,
+        is_deleted: false,
       },
       select: ['id', 'rating', 'comment', 'created_at', 'updated_at'],
     });
@@ -114,6 +121,7 @@ export class RestaurantService {
         id,
         user_id,
         user_type,
+        is_deleted: false,
       },
       select: ['id', 'rating', 'comment', 'created_at', 'updated_at'],
     });
@@ -128,15 +136,22 @@ export class RestaurantService {
     return;
   }
 
-  async removeReview(id: number): Promise<void> {
+  async removeReview(
+    user_id: number,
+    user_type: UserType,
+    id: number,
+  ): Promise<void> {
     const restaurantReviewToDelete =
       await this.restaurantReviewRepository.findOne({
         where: {
           id,
+          user_id,
+          user_type,
           is_deleted: false,
         },
         select: ['id'],
       });
+
     if (restaurantReviewToDelete) {
       restaurantReviewToDelete.is_deleted = true;
       await this.restaurantReviewRepository.save(restaurantReviewToDelete);
@@ -172,6 +187,7 @@ export class RestaurantService {
       await this.restaurantReviewReplyRepository.findOne({
         where: {
           id,
+          is_deleted: false,
         },
       });
     if (!restaurantReviewReply) {
