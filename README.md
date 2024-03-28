@@ -16,7 +16,6 @@ $ docker build -t my_postgres_pgadmin_image . && docker run -d -p 5435:5432 -p 5
 ```
 You can also install pgAdmin tool to view database ui
 
-
 ## Nestjs project breakdown
 ![image](https://github.com/amogh-chavan/zagnow/assets/55050758/c98b8391-c4f2-44dd-afb0-f238b89cdd4b)
 
@@ -28,6 +27,7 @@ You can also install pgAdmin tool to view database ui
 
 ## Swagger Link
 http://localhost:5000/docs
+http://localhost:5000/docs-json 
 ![image](https://github.com/amogh-chavan/zagnow/assets/55050758/12b491d6-a1e7-4720-b71f-9dfb71124880)
 ![image](https://github.com/amogh-chavan/zagnow/assets/55050758/22e747e2-d8e8-4527-8857-917a8f729976)
 
