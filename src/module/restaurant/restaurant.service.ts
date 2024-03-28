@@ -9,6 +9,7 @@ import { RestaurantReviewReply } from './entities/restaurant_replies.entity';
 import { UpdateRestaurantReviewDto } from './dto/update-restaurant-review.dto';
 import { UpdateRestaurantReviewReplyDto } from './dto/update-restaurant-review-reply.dto';
 import { UserType } from 'src/shared/enums/user_type';
+import { calculateAverageRating } from 'src/shared/utils/calculator';
 
 @Injectable()
 export class RestaurantService {
@@ -106,8 +107,17 @@ export class RestaurantService {
       throw new BadRequestException('Restaurant not found');
     }
 
+    const restaurantRating = calculateAverageRating(
+      restaurant.rating,
+      review.rating,
+    );
+
     const restaurant_review = this.restaurantReviewRepository.create(review);
-    return await this.restaurantReviewRepository.save(restaurant_review);
+    this.restaurantRepository.merge(restaurant, { rating: restaurantRating });
+    await this.restaurantRepository.save(restaurant);
+    const createdReview =
+      await this.restaurantReviewRepository.save(restaurant_review);
+    return createdReview;
   }
 
   async updateReview(
