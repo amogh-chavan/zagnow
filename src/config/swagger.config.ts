@@ -8,6 +8,7 @@ const setupSwagger = function (app: NestFastifyApplication) {
     .setTitle(swaggerMessages.TITLE)
     .setDescription(swaggerMessages.DESCRIPTION)
     .setVersion('v1')
+    .setExternalDoc('Postman Collection', '/docs-json')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
       TOKEN_NAME,
