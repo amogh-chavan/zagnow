@@ -11,7 +11,7 @@ import {
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import ApiResponse from 'src/shared/dto/api_response.dto';
 import { LoginCustomerDto } from './dto/login-customer.dto';
 import { AuthGuard } from './auth.gaurd';
@@ -24,12 +24,14 @@ export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
+  @ApiOperation({ summary: 'create a new customer as guest user' })
   async create(@Body() createCustomerDto: CreateCustomerDto) {
     const data = await this.customerService.create(createCustomerDto);
     return new ApiResponse(true, data, 'Customer created');
   }
 
   @Get()
+  @ApiOperation({ summary: 'get customer details as customer' })
   @UseGuards(AuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async findOne(@Req() request: RequestTokenPayload) {
@@ -38,6 +40,7 @@ export class CustomerController {
   }
 
   @Patch()
+  @ApiOperation({ summary: 'update customer details as customer' })
   @UseGuards(AuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async update(
@@ -52,6 +55,7 @@ export class CustomerController {
   }
 
   @Delete()
+  @ApiOperation({ summary: 'delete customer profile as customer' })
   @UseGuards(AuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async remove(@Req() request: RequestTokenPayload) {
@@ -60,6 +64,7 @@ export class CustomerController {
   }
 
   @Post('/auth/login')
+  @ApiOperation({ summary: 'Login as customer' })
   async login(@Body() loginCustomerDto: LoginCustomerDto) {
     const data = await this.customerService.login(loginCustomerDto);
     return new ApiResponse(true, data, 'Customer logged in');

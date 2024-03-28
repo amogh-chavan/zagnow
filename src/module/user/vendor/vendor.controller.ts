@@ -12,7 +12,7 @@ import {
 import { VendorService } from './vendor.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import ApiResponse from 'src/shared/dto/api_response.dto';
 import { LoginVendorDto } from './dto/login-vendor.dto';
 import { AuthGuard } from './auth.gaurd';
@@ -29,6 +29,7 @@ export class VendorController {
   constructor(private readonly vendorService: VendorService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new vendor profile as guest user' })
   async create(@Body() createVendorDto: CreateVendorDto) {
     if (
       !createVendorDto.roles.every((role: VendorRoles) =>
@@ -46,6 +47,7 @@ export class VendorController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get vendor profile as vendor' })
   @Roles(VendorRoles.OWNER)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -55,6 +57,7 @@ export class VendorController {
   }
 
   @Patch()
+  @ApiOperation({ summary: 'Update vendor profile as vendor' })
   @Roles(VendorRoles.OWNER)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -70,6 +73,7 @@ export class VendorController {
   }
 
   @Delete()
+  @ApiOperation({ summary: 'Delete vendor profile as vendor' })
   @Roles(VendorRoles.OWNER)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -79,6 +83,7 @@ export class VendorController {
   }
 
   @Post('/auth/login')
+  @ApiOperation({ summary: 'Login as vendor' })
   async login(@Body() loginVendorDto: LoginVendorDto) {
     const data = await this.vendorService.login(loginVendorDto);
     return new ApiResponse(true, data, 'Vendor logged in');

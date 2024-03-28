@@ -12,7 +12,7 @@ import {
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import ApiResponse from 'src/shared/dto/api_response.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { AuthGuard } from './auth.gaurd';
@@ -28,6 +28,7 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create new admin as superadmin' })
   @Roles(AdminRoles.SUPERADMIN)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -50,6 +51,7 @@ export class AdminController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a admin as superadmin' })
   @Roles(AdminRoles.SUPERADMIN)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -59,6 +61,7 @@ export class AdminController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a admin as superadmin' })
   @Roles(AdminRoles.SUPERADMIN)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -71,6 +74,7 @@ export class AdminController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a admin as superadmin' })
   @Roles(AdminRoles.SUPERADMIN)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
@@ -80,6 +84,7 @@ export class AdminController {
   }
 
   @Post('/auth/login')
+  @ApiOperation({ summary: 'Login as admin or superadmin' })
   async login(@Body() loginAdminDto: LoginAdminDto) {
     const data = await this.adminService.login(loginAdminDto);
     return new ApiResponse(true, data, 'Admin logged in');
