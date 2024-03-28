@@ -76,12 +76,45 @@ export class VendorService {
     }
 
     existingVendor.name = updateVendorDto.name || existingVendor.name;
-    existingVendor.restaurant_id =
-      updateVendorDto.restaurant_id || existingVendor.restaurant_id;
+
     // If password is provided, update it securely
     if (updateVendorDto.password) {
       existingVendor.password = await bcrypt.hash(updateVendorDto.password, 10);
     }
+
+    await this.vendorRepository.save(existingVendor);
+    return;
+  }
+
+  async updateRestaurantId(id: number, restaurant_id: number): Promise<void> {
+    const existingRestaurantVendor = await this.vendorRepository.findOne({
+      where: {
+        restaurant_id,
+        is_deleted: false,
+      },
+      select: ['id', 'name', 'email'],
+    });
+
+    if (!existingRestaurantVendor) {
+      throw new BadRequestException(
+        'Restaurant is already associated with one owner',
+      );
+    }
+
+    const existingVendor = await this.vendorRepository.findOne({
+      where: {
+        id,
+        is_deleted: false,
+      },
+      select: ['id', 'name', 'email'],
+    });
+
+    if (!existingVendor) {
+      throw new BadRequestException('Vendor not found');
+    }
+
+    existingVendor.restaurant_id =
+      restaurant_id || existingVendor.restaurant_id;
 
     await this.vendorRepository.save(existingVendor);
     return;

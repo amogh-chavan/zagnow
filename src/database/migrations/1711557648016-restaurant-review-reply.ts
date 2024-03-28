@@ -8,7 +8,7 @@ export class RestaurantReviewReply1711557648016 implements MigrationInterface {
         user_id bigint NOT NULL, 
         user_type varchar(255) NOT NULL, 
         restaurant_id bigint DEFAULT NULL, 
-        rating flaot NOT NULL, 
+        rating numeric NOT NULL, 
         comment varchar(255), 
         is_deleted boolean NOT NULL DEFAULT false, 
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 

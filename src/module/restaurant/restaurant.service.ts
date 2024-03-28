@@ -54,7 +54,17 @@ export class RestaurantService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.restaurantRepository.delete(id);
+    const restaurantToDelete = await this.restaurantRepository.findOne({
+      where: {
+        id,
+        is_deleted: false,
+      },
+      select: ['id'],
+    });
+    if (restaurantToDelete) {
+      restaurantToDelete.is_deleted = true;
+      await this.restaurantRepository.save(restaurantToDelete);
+    }
   }
 
   async readRestaurantReviews(
@@ -102,7 +112,18 @@ export class RestaurantService {
   }
 
   async removeReview(id: number): Promise<void> {
-    await this.restaurantReviewRepository.delete(id);
+    const restaurantReviewToDelete =
+      await this.restaurantReviewRepository.findOne({
+        where: {
+          id,
+          is_deleted: false,
+        },
+        select: ['id'],
+      });
+    if (restaurantReviewToDelete) {
+      restaurantReviewToDelete.is_deleted = true;
+      await this.restaurantReviewRepository.save(restaurantReviewToDelete);
+    }
   }
 
   async createReviewReply(
@@ -147,6 +168,19 @@ export class RestaurantService {
   }
 
   async removeReviewReply(id: number): Promise<void> {
-    await this.restaurantReviewReplyRepository.delete(id);
+    const restaurantReviewReplyToDelete =
+      await this.restaurantReviewReplyRepository.findOne({
+        where: {
+          id,
+          is_deleted: false,
+        },
+        select: ['id'],
+      });
+    if (restaurantReviewReplyToDelete) {
+      restaurantReviewReplyToDelete.is_deleted = true;
+      await this.restaurantReviewReplyRepository.save(
+        restaurantReviewReplyToDelete,
+      );
+    }
   }
 }

@@ -23,7 +23,6 @@ import ApiResponse from 'src/shared/dto/api_response.dto';
 import { CreateRestaurantReviewReplyDto } from './dto/create-restaurant-review-reply.dto';
 import { RestaurantReviewReply } from './entities/restaurant_replies.entity';
 import { VendorService } from '../user/vendor/vendor.service';
-import { UpdateVendorDto } from '../user/vendor/dto/update-vendor.dto';
 
 @ApiTags('Restaurant')
 @Controller('vendor/restaurant')
@@ -44,9 +43,7 @@ export class RestaurantVendorController {
     const { id } = request.data as VendorTokenPayload;
     const data =
       await this.restaurantService.createRestaurant(createRestaurantDto);
-    await this.vendorService.update(id, {
-      restaurant_id: data.id,
-    } as UpdateVendorDto);
+    await this.vendorService.updateRestaurantId(id, data.id);
     return new ApiResponse(true, data, 'Restaurant created');
   }
 
