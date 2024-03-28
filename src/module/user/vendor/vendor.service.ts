@@ -58,7 +58,7 @@ export class VendorService {
         id,
         is_deleted: false,
       },
-      select: ['id', 'name', 'email'],
+      select: ['id', 'name', 'email', 'restaurant_id'],
     });
   }
 

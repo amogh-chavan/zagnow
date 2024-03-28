@@ -8,9 +8,9 @@ import {
   UseGuards,
   Param,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
-import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminRoles } from '../user/admin/enum';
@@ -24,17 +24,33 @@ import { UpdateRestaurantReviewDto } from './dto/update-restaurant-review.dto';
 import ApiResponse from 'src/shared/dto/api_response.dto';
 import { RequestTokenPayload } from 'src/shared/types/request';
 import { AdminTokenPayload } from '../user/admin/types';
+import { CreateRestaurantAdminDto } from './dto/create-restaurant-admin.dto';
+import { VendorService } from '../user/vendor/vendor.service';
 
 @ApiTags('Restaurant')
 @Controller('admin/restaurant')
 export class RestaurantAdminController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(
+    private readonly restaurantService: RestaurantService,
+    private readonly vendorService: VendorService,
+  ) {}
 
   @Post()
   @DAdminRoles(AdminRoles.SUPERADMIN, AdminRoles.ADMIN)
   @UseGuards(AdminAuthGuard, AdminRoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
-  async create(@Body() createRestaurantDto: CreateRestaurantDto) {
+  async create(@Body() createRestaurantAdminDto: CreateRestaurantAdminDto) {
+    const { vendor_id, ...createRestaurantDto } = createRestaurantAdminDto;
+    const vendor = await this.vendorService.findOne(vendor_id);
+    if (!vendor) {
+      throw new BadRequestException('Vendor id invalid');
+    }
+
+    if (vendor.restaurant_id) {
+      throw new BadRequestException(
+        'Vendor is already associated with a restaurant',
+      );
+    }
     const data =
       await this.restaurantService.createRestaurant(createRestaurantDto);
     return new ApiResponse(true, data, 'Restaurant created');
