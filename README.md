@@ -19,7 +19,9 @@ You can also install pgAdmin tool to view database ui
 ## Nestjs project breakdown
 ![image](https://github.com/amogh-chavan/zagnow/assets/55050758/c98b8391-c4f2-44dd-afb0-f238b89cdd4b)
 
-
+## Superadmin Creds
+email: superadmin@gmail.com
+password: password
 
 
 ## Database ERD 
