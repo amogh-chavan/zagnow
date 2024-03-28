@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { VendorService } from './vendor.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
@@ -20,6 +21,7 @@ import { RoleGuard } from './role.gaurd';
 import { Roles } from './role.decorator';
 import { VendorRoles } from './enum';
 import { RequestTokenPayload } from 'src/shared/types/request';
+import { hasDuplicates } from 'src/shared/utils/validator';
 
 @Controller('user/vendor')
 @ApiTags('Vendor')
@@ -28,6 +30,17 @@ export class VendorController {
 
   @Post()
   async create(@Body() createVendorDto: CreateVendorDto) {
+    if (
+      !createVendorDto.roles.every((role: VendorRoles) =>
+        Object.values(VendorRoles).includes(role),
+      )
+    ) {
+      throw new BadRequestException('Invalid role: Roles must be owner');
+    }
+
+    if (hasDuplicates(createVendorDto.roles)) {
+      throw new BadRequestException('Duplicate roles are not allowed');
+    }
     const data = await this.vendorService.create(createVendorDto);
     return new ApiResponse(true, data, 'Vendor created');
   }

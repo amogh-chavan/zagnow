@@ -28,15 +28,4 @@ export class CreateAdminDto {
   @MinLength(6) // Enforce minimum password length
   @ApiProperty()
   password: string;
-
-  // Custom validation method
-  validateRoles(roles: string[]) {
-    if (
-      !roles.every((role) =>
-        Object.values(AdminRoles).includes(role as AdminRoles),
-      )
-    ) {
-      throw new Error('Invalid role: Roles must be from the AdminRoles enum');
-    }
-  }
 }

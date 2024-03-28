@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
@@ -19,6 +20,7 @@ import { TOKEN_NAME } from 'src/constant/variable.constant';
 import { RoleGuard } from './role.gaurd';
 import { Roles } from './role.decorator';
 import { AdminRoles } from './enum';
+import { hasDuplicates } from 'src/shared/utils/validator';
 
 @Controller('user/admin')
 @ApiTags('Admin')
@@ -30,6 +32,19 @@ export class AdminController {
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async create(@Body() createAdminDto: CreateAdminDto) {
+    if (
+      !createAdminDto.roles.every((role: AdminRoles) =>
+        Object.values(AdminRoles).includes(role),
+      )
+    ) {
+      throw new BadRequestException(
+        'Invalid role: Roles must be superadmin, admin',
+      );
+    }
+
+    if (hasDuplicates(createAdminDto.roles)) {
+      throw new BadRequestException('Duplicate roles are not allowed');
+    }
     const data = await this.adminService.create(createAdminDto);
     return new ApiResponse(true, data, 'Admin created');
   }

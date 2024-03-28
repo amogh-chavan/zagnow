@@ -14,7 +14,10 @@ export class AccessContorlService {
 
   constructor() {
     // Initialize the role hierarchy with default roles
-    this.buildRoles([VendorRoles.MANAGER, VendorRoles.OWNER]);
+    this.buildRoles([
+      // VendorRoles.MANAGER,
+      VendorRoles.OWNER,
+    ]);
   }
 
   /**
