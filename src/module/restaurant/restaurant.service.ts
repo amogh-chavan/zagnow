@@ -8,6 +8,7 @@ import { RestaurantReview } from './entities/restaurant_review.entity';
 import { RestaurantReviewReply } from './entities/restaurant_replies.entity';
 import { UpdateRestaurantReviewDto } from './dto/update-restaurant-review.dto';
 import { UpdateRestaurantReviewReplyDto } from './dto/update-restaurant-review-reply.dto';
+import { UserType } from 'src/shared/enums/user_type';
 
 @Injectable()
 export class RestaurantService {
@@ -70,10 +71,20 @@ export class RestaurantService {
   async readRestaurantReviews(
     restaurant_id: number,
   ): Promise<RestaurantReview[]> {
+    const restaurant = await this.restaurantRepository.findOne({
+      where: {
+        id: restaurant_id,
+      },
+    });
+
+    if (!restaurant) {
+      throw new BadRequestException('Restaurant not found');
+    }
     return await this.restaurantReviewRepository.find({
       where: {
         restaurant_id,
       },
+      select: ['id', 'rating', 'comment', 'created_at', 'updated_at'],
     });
   }
 
@@ -93,13 +104,18 @@ export class RestaurantService {
   }
 
   async updateReview(
+    user_id: number,
+    user_type: UserType,
     id: number,
     updateRestaurantReviewDto: UpdateRestaurantReviewDto,
-  ): Promise<RestaurantReview> {
+  ): Promise<void> {
     const restaurantReview = await this.restaurantReviewRepository.findOne({
       where: {
         id,
+        user_id,
+        user_type,
       },
+      select: ['id', 'rating', 'comment', 'created_at', 'updated_at'],
     });
     if (!restaurantReview) {
       throw new BadRequestException('Restaurant Review Not Found');
@@ -108,7 +124,8 @@ export class RestaurantService {
       restaurantReview,
       updateRestaurantReviewDto,
     );
-    return await this.restaurantReviewRepository.save(restaurantReview);
+    await this.restaurantReviewRepository.save(restaurantReview);
+    return;
   }
 
   async removeReview(id: number): Promise<void> {

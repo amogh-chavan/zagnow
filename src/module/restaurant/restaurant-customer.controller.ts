@@ -63,10 +63,14 @@ export class RestaurantCustomerController {
   @UseGuards(CustomerAuthGuard)
   @ApiBearerAuth(TOKEN_NAME)
   async updateReview(
+    @Req() request: RequestTokenPayload,
     @Param('id') id: string,
     @Body() updateRestaurantReviewDto: UpdateRestaurantReviewDto,
   ) {
+    const tokenData = request.data as CustomerTokenPayload;
     const data = await this.restaurantService.updateReview(
+      tokenData.id,
+      tokenData.user_type,
       +id,
       updateRestaurantReviewDto,
     );
