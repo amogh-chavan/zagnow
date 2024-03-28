@@ -17,6 +17,8 @@ There is much room for improvement and scaling in this code, but due to current 
 
 ## Swagger Link
 http://localhost:5000/docs
+![image](https://github.com/amogh-chavan/zagnow/assets/55050758/12b491d6-a1e7-4720-b71f-9dfb71124880)
+![image](https://github.com/amogh-chavan/zagnow/assets/55050758/22e747e2-d8e8-4527-8857-917a8f729976)
 
 ## Techstack
 Typescript
